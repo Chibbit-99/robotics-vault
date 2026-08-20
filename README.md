@@ -10,6 +10,7 @@ This was created by Nathan Liu for fun but also to make sure he wasn't cooked fo
 *Wise Wisdom from Bjarne Stroustrup*
 
 ## Contributing
+* Use pull requests to contribute but trusted contributors may recieve full access to the repo.
 * Edit `js/sidebar.js` to add a new entry in the sidebar.
 * When adding a new page for the vault copy the code from `template.html` and edit it for your needs.
 * Store subpages under a folder named after its parent.
