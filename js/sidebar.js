@@ -58,6 +58,9 @@ const sidebarPages = [
             }
         ]
     },
+    {
+        title: "WPILib Documentation",
+        file: "https://github.wpilib.org/allwpilib/docs/release/cpp/index.html"
 ];
 
 
