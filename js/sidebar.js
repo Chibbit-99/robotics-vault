@@ -1,42 +1,223 @@
-const pages = [
+const sidebarPages = [
     {
         title: "Introduction",
         file: "index.html"
     },
+
     {
         title: "Getting Started",
-        file: "getting-started.html"
+        children: [
+            {
+                title: "Installation",
+                file: "installation.html"
+            },
+            {
+                title: "Configuration",
+                file: "configuration.html"
+            }
+        ]
     },
+
     {
         title: "API Reference",
+        children: [
+            {
+                title: "Endpoints",
+                file: "endpoints.html"
+            },
+            {
+                title: "Authentication",
+                file: "authentication.html"
+            }
+        ]
+    },
+
+    {
+        title: "API",
         file: "api.html"
     }
 ];
 
+
+function getCurrentPage() {
+    return window.location.pathname.split("/").pop() || "index.html";
+}
+
+
 function buildSidebar() {
     const sidebar = document.getElementById("sidebar");
 
-    let html = `
-        <h2>Documentation</h2>
+    if (!sidebar) return;
+
+    const currentPage = getCurrentPage();
+
+    sidebar.innerHTML = `
+        <div class="sidebar-header">
+            <h2>Documentation</h2>
+        </div>
+
+        <div class="sidebar-search">
+            <input
+                type="text"
+                id="sidebar-search"
+                placeholder="Search documentation..."
+                autocomplete="off"
+            >
+        </div>
+
+        <nav id="sidebar-nav"></nav>
     `;
 
-    const currentPage = window.location.pathname
-        .split("/")
-        .pop() || "index.html";
+    renderNavigation(currentPage);
 
-    pages.forEach(page => {
-        const active = currentPage === page.file
-            ? "active"
-            : "";
+    const search = document.getElementById("sidebar-search");
+
+    search.addEventListener("input", () => {
+        renderNavigation(currentPage, search.value);
+    });
+}
+
+
+function renderNavigation(currentPage, searchQuery = "") {
+    const nav = document.getElementById("sidebar-nav");
+
+    if (!nav) return;
+
+    const query = searchQuery.toLowerCase().trim();
+
+    let html = "";
+
+    sidebarPages.forEach((section, sectionIndex) => {
+
+        // Regular page
+        if (!section.children) {
+
+            if (
+                query &&
+                !section.title.toLowerCase().includes(query)
+            ) {
+                return;
+            }
+
+            const active =
+                currentPage === section.file
+                    ? "active"
+                    : "";
+
+            html += `
+                <a
+                    class="sidebar-link ${active}"
+                    href="${section.file}"
+                >
+                    ${section.title}
+                </a>
+            `;
+
+            return;
+        }
+
+
+        // Section with children
+        const matchingChildren = section.children.filter(child => {
+            return (
+                !query ||
+                section.title.toLowerCase().includes(query) ||
+                child.title.toLowerCase().includes(query)
+            );
+        });
+
+        if (matchingChildren.length === 0) {
+            return;
+        }
+
+
+        const containsCurrentPage = section.children.some(
+            child => child.file === currentPage
+        );
+
+        const sectionId = `sidebar-section-${sectionIndex}`;
 
         html += `
-            <a href="${page.file}" class="${active}">
-                ${page.title}
-            </a>
+            <div class="sidebar-section">
+
+                <button
+                    class="sidebar-section-button"
+                    onclick="toggleSidebarSection('${sectionId}')"
+                >
+                    <span>${section.title}</span>
+
+                    <span
+                        class="sidebar-arrow ${
+                            containsCurrentPage ? "open" : ""
+                        }"
+                    >
+                        ›
+                    </span>
+                </button>
+
+                <div
+                    id="${sectionId}"
+                    class="sidebar-children ${
+                        containsCurrentPage || query ? "open" : ""
+                    }"
+                >
+        `;
+
+
+        matchingChildren.forEach(child => {
+
+            const active =
+                currentPage === child.file
+                    ? "active"
+                    : "";
+
+            html += `
+                <a
+                    class="sidebar-link sidebar-child ${active}"
+                    href="${child.file}"
+                >
+                    ${child.title}
+                </a>
+            `;
+        });
+
+
+        html += `
+                </div>
+            </div>
         `;
     });
 
-    sidebar.innerHTML = html;
+
+    if (!html) {
+        html = `
+            <div class="no-results">
+                No results found.
+            </div>
+        `;
+    }
+
+    nav.innerHTML = html;
 }
+
+
+function toggleSidebarSection(id) {
+    const section = document.getElementById(id);
+
+    if (!section) return;
+
+    section.classList.toggle("open");
+
+    const button = section.previousElementSibling;
+
+    if (button) {
+        const arrow = button.querySelector(".sidebar-arrow");
+
+        if (arrow) {
+            arrow.classList.toggle("open");
+        }
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", buildSidebar);
