@@ -223,6 +223,10 @@ body {
 }
 
 pre {
+    white-space: normal;
+    
+    word-break: normal;
+    
     background: #0f172a;
 
     color: white;
