@@ -1,41 +1,63 @@
 const sidebarPages = [
     {
-        title: "Introduction",
+        title: "Home",
         file: "index.html"
     },
 
     {
-        title: "Getting Started",
+        title: "C++",
         children: [
             {
-                title: "Installation",
-                file: "installation.html"
+                title: "Placeholder",
+                file: "placeholder.html"
             },
             {
-                title: "Configuration",
-                file: "configuration.html"
+                title: "Placeholder",
+                file: "placeholder.html"
             }
         ]
     },
 
     {
-        title: "API Reference",
+        title: "Bash",
         children: [
             {
-                title: "Endpoints",
-                file: "endpoints.html"
+                title: "Placeholder",
+                file: "placeholder.html"
             },
             {
-                title: "Authentication",
-                file: "authentication.html"
+                title: "Placeholder",
+                file: "placeholder.html"
             }
         ]
     },
 
     {
-        title: "API",
-        file: "api.html"
-    }
+        title: "Git",
+        children: [
+            {
+                title: "Placeholder",
+                file: "placeholder.html"
+            },
+            {
+                title: "Placeholder",
+                file: "placeholder.html"
+            }
+        ]
+    },
+    {
+        title: "Robot Code (WPILib)",
+        children: [
+            {
+                title: "Placeholder",
+                file: "placeholder.html"
+            },
+            {
+                title: "Placeholder",
+                file: "placeholder.html"
+            }
+        ]
+    },
 ];
 
 
@@ -53,14 +75,14 @@ function buildSidebar() {
 
     sidebar.innerHTML = `
         <div class="sidebar-header">
-            <h2>Documentation</h2>
+            <h2>Robotics Vault</h2>
         </div>
 
         <div class="sidebar-search">
             <input
                 type="text"
                 id="sidebar-search"
-                placeholder="Search documentation..."
+                placeholder="Search the vault..."
                 autocomplete="off"
             >
         </div>
